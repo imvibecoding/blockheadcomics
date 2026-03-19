@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 import { getAdminSession } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
@@ -8,11 +6,36 @@ export async function POST(request: NextRequest) {
     if (!await getAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 })
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
+    }
+
+    // Use Vercel Blob when token is available (deployed), filesystem locally
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      const { put } = await import('@vercel/blob')
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+      const blob = await put(`comics/${Date.now()}-${safeName}`, file, {
+        access: 'public',
+      })
+      return NextResponse.json({ url: blob.url })
+    }
+
+    // Local filesystem fallback
+    const { writeFile, mkdir } = await import('fs/promises')
+    const path = await import('path')
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
@@ -20,7 +43,12 @@ export async function POST(request: NextRequest) {
     const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
     await writeFile(path.join(uploadsDir, filename), buffer)
     return NextResponse.json({ url: `/uploads/${filename}` })
-  } catch {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+
+  } catch (err) {
+    console.error('Upload error:', err)
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Internal server error' },
+      { status: 500 }
+    )
   }
 }
