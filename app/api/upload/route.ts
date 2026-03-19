@@ -13,14 +13,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 })
+    // Validate file type — images and videos allowed
+    const isImage = file.type.startsWith('image/')
+    const isVideo = file.type.startsWith('video/')
+    if (!isImage && !isVideo) {
+      return NextResponse.json({ error: 'Only image or video files are allowed' }, { status: 400 })
     }
 
-    // Validate file size (10MB max)
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
+    // Size limits: 10 MB for images, 200 MB for video
+    const maxBytes = isVideo ? 200 * 1024 * 1024 : 10 * 1024 * 1024
+    if (file.size > maxBytes) {
+      return NextResponse.json(
+        { error: `File too large (max ${isVideo ? '200' : '10'}MB)` },
+        { status: 400 }
+      )
     }
 
     // Use Vercel Blob when token is available (deployed), filesystem locally

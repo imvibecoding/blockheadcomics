@@ -34,6 +34,7 @@ export default function NewComicPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [uploading, setUploading] = useState<string | null>(null)
+  const [uploadingAnim, setUploadingAnim] = useState(false)
 
   const [form, setForm] = useState({
     title: '',
@@ -43,6 +44,7 @@ export default function NewComicPage() {
     series: 'Daily Life',
     tags: '',
     featured: false,
+    animation: '',
   })
   const [panels, setPanels] = useState<Panel[]>([
     { id: '1', image: '/placeholder-panel.svg', caption: '', order: 1 },
@@ -81,6 +83,20 @@ export default function NewComicPage() {
       if (data.url) updatePanel(panelId, 'image', data.url)
     } finally {
       setUploading(null)
+    }
+  }
+
+  async function uploadAnimation(file: File) {
+    setUploadingAnim(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (data.url) setForm(p => ({ ...p, animation: data.url }))
+      else alert(data.error || 'Upload failed')
+    } finally {
+      setUploadingAnim(false)
     }
   }
 
@@ -333,6 +349,53 @@ export default function NewComicPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Animation card */}
+          <div
+            style={{
+              background: '#ffffff',
+              border: '3px solid #1A1A1A',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              boxShadow: '4px 4px 0 0 #1A1A1A',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <h2 style={{ fontFamily: 'var(--font-headline)', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 0.5rem', color: '#1A1A1A' }}>
+              Animation (Optional)
+            </h2>
+            <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 1rem', lineHeight: 1.5 }}>
+              Upload an animated version made in ToonBoom, FlipAClip, etc. Supports MP4 and WebM.
+            </p>
+            {form.animation && (
+              <div style={{ marginBottom: '1rem' }}>
+                <video src={form.animation} controls style={{ width: '100%', maxHeight: '200px', border: '2px solid #1A1A1A', borderRadius: '8px', background: '#000', display: 'block' }} />
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.78rem', color: '#22c55e', fontWeight: 700 }}>✓ Animation set</span>
+                  <button type="button" onClick={() => setForm(p => ({ ...p, animation: '' }))} style={{ background: 'transparent', border: '1px solid #f95630', borderRadius: '4px', padding: '0.1rem 0.5rem', color: '#f95630', fontSize: '0.75rem', cursor: 'pointer' }}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div>
+                <label style={labelStyle}>Upload Video</label>
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm,video/*"
+                  onChange={e => { const file = e.target.files?.[0]; if (file) uploadAnimation(file) }}
+                  disabled={uploadingAnim}
+                  style={{ fontSize: '0.85rem' }}
+                />
+                {uploadingAnim && <span style={{ fontSize: '0.78rem', color: '#5c5b59' }}>Uploading video...</span>}
+              </div>
+              <div>
+                <label style={labelStyle}>Or paste video URL</label>
+                <input style={{ ...inputStyle, boxShadow: 'none' }} value={form.animation} onChange={e => setForm(p => ({ ...p, animation: e.target.value }))} placeholder="https://..." />
+              </div>
             </div>
           </div>
 

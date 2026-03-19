@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
-import ComicPanel from '@/components/ComicPanel'
+import ComicReader from '@/components/ComicReader'
 import { getComics, getComic } from '@/lib/data'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -23,7 +23,7 @@ export default async function ComicReaderPage({
   const nextComic = currentIndex < allComics.length - 1 ? allComics[currentIndex + 1] : null
   const totalComics = allComics.length
 
-  const panelRotations = [-1.5, 1, -0.5, 1.5, -1, 0.8]
+  const sortedPanels = [...comic.panels].sort((a, b) => a.order - b.order)
 
   return (
     <>
@@ -114,44 +114,26 @@ export default async function ComicReaderPage({
           </div>
         </section>
 
-        {/* Comic panels */}
+        {/* Comic reader — one panel at a time */}
         <section
           style={{
-            background: '#ffffff',
+            background: '#F2F0ED',
             borderBottom: '4px solid #1A1A1A',
             padding: '3rem 0',
           }}
         >
           <div className="max-w-6xl mx-auto px-4 md:px-8">
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: `repeat(${Math.min(comic.panels.length, 4)}, 1fr)`,
-                gap: '2rem',
-              }}
-            >
-              {comic.panels
-                .sort((a, b) => a.order - b.order)
-                .map((panel, i) => (
-                  <ComicPanel
-                    key={panel.id}
-                    image={panel.image}
-                    caption={panel.caption}
-                    panelNumber={i + 1}
-                    rotate={panelRotations[i % panelRotations.length]}
-                  />
-                ))}
-            </div>
+            <ComicReader panels={sortedPanels} title={comic.title} />
 
             {/* Tags */}
             {comic.tags.length > 0 && (
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '2.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <span style={{ fontWeight: 700, color: '#5c5b59', fontSize: '0.9rem', alignSelf: 'center' }}>Tags:</span>
                 {comic.tags.map(tag => (
                   <span
                     key={tag}
                     style={{
-                      background: '#F2F0ED',
+                      background: '#ffffff',
                       border: '2px solid #1A1A1A',
                       borderRadius: '6px',
                       padding: '0.2rem 0.6rem',
@@ -168,6 +150,72 @@ export default async function ComicReaderPage({
             )}
           </div>
         </section>
+
+        {/* Animation section — shows when a video animation is attached */}
+        {comic.animation && (
+          <section
+            style={{
+              background: '#1A1A1A',
+              borderBottom: '4px solid #F5C800',
+              padding: '3rem 0',
+            }}
+          >
+            <div className="max-w-6xl mx-auto px-4 md:px-8">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                <div
+                  style={{
+                    background: '#F5C800',
+                    color: '#1A1A1A',
+                    fontFamily: 'var(--font-headline)',
+                    fontWeight: 900,
+                    fontSize: '0.8rem',
+                    padding: '0.2rem 0.7rem',
+                    borderRadius: '4px',
+                    letterSpacing: '0.1em',
+                  }}
+                >
+                  🎬 ANIMATION
+                </div>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontWeight: 900,
+                    fontSize: '1.4rem',
+                    color: '#F5C800',
+                    margin: 0,
+                  }}
+                >
+                  {comic.title} — Animated
+                </h2>
+              </div>
+              <div
+                style={{
+                  maxWidth: '640px',
+                  margin: '0 auto',
+                  border: '4px solid #F5C800',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '8px 8px 0 0 rgba(245,200,0,0.3)',
+                  background: '#000',
+                }}
+              >
+                <video
+                  src={comic.animation}
+                  controls
+                  loop
+                  playsInline
+                  style={{
+                    width: '100%',
+                    display: 'block',
+                    maxHeight: '640px',
+                  }}
+                >
+                  Your browser does not support video playback.
+                </video>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Prev / Next navigation */}
         <section className="max-w-6xl mx-auto px-4 md:px-8 py-8">

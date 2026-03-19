@@ -23,6 +23,7 @@ export type Comic = {
   panels: Panel[]
   tags: string[]
   featured: boolean
+  animation?: string
 }
 
 export type Character = {

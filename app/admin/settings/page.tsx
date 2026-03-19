@@ -14,6 +14,8 @@ type SiteSettings = {
   fanArtEmail: string
   shopifyStoreUrl: string
   shopifyStorefrontToken: string
+  instagramUserId: string
+  instagramAccessToken: string
 }
 
 const inputStyle: React.CSSProperties = {
@@ -54,6 +56,8 @@ export default function AdminSettingsPage() {
     fanArtEmail: '',
     shopifyStoreUrl: '',
     shopifyStorefrontToken: '',
+    instagramUserId: '',
+    instagramAccessToken: '',
   })
 
   useEffect(() => {
@@ -302,6 +306,56 @@ export default function AdminSettingsPage() {
                   value={settings.shopifyStorefrontToken}
                   onChange={e => setSettings(p => ({ ...p, shopifyStorefrontToken: e.target.value }))}
                   placeholder="shpat_••••••••••••••••"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Instagram */}
+          <div
+            style={{
+              background: '#ffffff',
+              border: '3px solid #1A1A1A',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              boxShadow: '4px 4px 0 0 #1A1A1A',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <h2 style={{ fontFamily: 'var(--font-headline)', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 0.5rem', color: '#1A1A1A' }}>
+              Instagram Publishing
+            </h2>
+            <p style={{ fontSize: '0.85rem', color: '#5c5b59', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
+              Connect your Instagram Business account to post panels directly from the comic editor.
+              You need a <strong>Facebook App</strong> with Instagram Graph API enabled, and a <strong>long-lived access token</strong>.
+              Get these from <a href="https://developers.facebook.com" target="_blank" rel="noopener noreferrer" style={{ color: '#1A1A1A' }}>developers.facebook.com</a>.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={labelStyle}>Instagram User ID</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  The numeric ID of your Instagram Professional account (not your username).
+                  Find it via the Graph API Explorer: <code>GET /me?fields=id</code>
+                </p>
+                <input
+                  style={inputStyle}
+                  value={settings.instagramUserId}
+                  onChange={e => setSettings(p => ({ ...p, instagramUserId: e.target.value }))}
+                  placeholder="17841400000000000"
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Instagram Access Token</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  Long-lived user access token with <code>instagram_basic</code>, <code>instagram_content_publish</code> permissions.
+                  Expires every ~60 days — refresh it in the Facebook Token Debugger.
+                </p>
+                <input
+                  style={inputStyle}
+                  type="password"
+                  value={settings.instagramAccessToken}
+                  onChange={e => setSettings(p => ({ ...p, instagramAccessToken: e.target.value }))}
+                  placeholder="EAAxxxxxxxxxxxxxxxxxx"
                 />
               </div>
             </div>
