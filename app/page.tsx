@@ -3,6 +3,7 @@ import Footer from '@/components/Footer'
 import ComicPanel from '@/components/ComicPanel'
 import { getComics, getCharacters } from '@/lib/data'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -132,6 +133,7 @@ export default async function HomePage() {
               {characters.map((char, i) => {
                 const rotations = [-6, 0, 5]
                 const rot = rotations[i % rotations.length]
+                const hasPhoto = char.image && char.image !== '/placeholder-character.svg'
                 return (
                   <div
                     key={char.id}
@@ -155,17 +157,28 @@ export default async function HomePage() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         position: 'relative',
+                        overflow: 'hidden',
                       }}
                     >
-                      {/* Eyes */}
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-                        <div style={{ width: '12px', height: '12px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                          <div style={{ position: 'absolute', top: '2px', left: '2px', width: '4px', height: '4px', background: 'white', borderRadius: '50%' }} />
+                      {hasPhoto ? (
+                        <Image
+                          src={char.image}
+                          alt={char.name}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                          unoptimized={char.image.startsWith('/') && !char.image.startsWith('//')}
+                        />
+                      ) : (
+                        /* Eyes */
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                          <div style={{ width: '12px', height: '12px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '2px', left: '2px', width: '4px', height: '4px', background: 'white', borderRadius: '50%' }} />
+                          </div>
+                          <div style={{ width: '12px', height: '12px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '2px', left: '2px', width: '4px', height: '4px', background: 'white', borderRadius: '50%' }} />
+                          </div>
                         </div>
-                        <div style={{ width: '12px', height: '12px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                          <div style={{ position: 'absolute', top: '2px', left: '2px', width: '4px', height: '4px', background: 'white', borderRadius: '50%' }} />
-                        </div>
-                      </div>
+                      )}
                     </div>
                     <div
                       style={{
@@ -579,6 +592,7 @@ export default async function HomePage() {
           >
             {characters.map((char, i) => {
               const rotations = [-2, 0, 2]
+              const hasPhoto = char.image && char.image !== '/placeholder-character.svg'
               return (
                 <div
                   key={char.id}
@@ -610,17 +624,28 @@ export default async function HomePage() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
-                    {/* Eyes */}
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-                      <div style={{ width: '14px', height: '14px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '3px', left: '3px', width: '5px', height: '5px', background: 'white', borderRadius: '50%' }} />
+                    {hasPhoto ? (
+                      <Image
+                        src={char.image}
+                        alt={char.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        unoptimized={char.image.startsWith('/') && !char.image.startsWith('//')}
+                      />
+                    ) : (
+                      /* Eyes */
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+                        <div style={{ width: '14px', height: '14px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                          <div style={{ position: 'absolute', top: '3px', left: '3px', width: '5px', height: '5px', background: 'white', borderRadius: '50%' }} />
+                        </div>
+                        <div style={{ width: '14px', height: '14px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                          <div style={{ position: 'absolute', top: '3px', left: '3px', width: '5px', height: '5px', background: 'white', borderRadius: '50%' }} />
+                        </div>
                       </div>
-                      <div style={{ width: '14px', height: '14px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '3px', left: '3px', width: '5px', height: '5px', background: 'white', borderRadius: '50%' }} />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div>

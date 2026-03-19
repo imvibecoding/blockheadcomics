@@ -2,6 +2,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { getCharacters } from '@/lib/data'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -146,30 +147,43 @@ export default async function CharactersPage() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
-                    {/* Eyes */}
-                    <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-                      <div style={{ width: '22px', height: '22px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '4px', left: '4px', width: '8px', height: '8px', background: 'white', borderRadius: '50%' }} />
-                      </div>
-                      <div style={{ width: '22px', height: '22px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '4px', left: '4px', width: '8px', height: '8px', background: 'white', borderRadius: '50%' }} />
-                      </div>
-                    </div>
-                    {/* Smile */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        bottom: '38px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '60px',
-                        height: '22px',
-                        borderBottom: '5px solid #1A1A1A',
-                        borderRadius: '0 0 30px 30px',
-                      }}
-                    />
+                    {featured.image && featured.image !== '/placeholder-character.svg' ? (
+                      <Image
+                        src={featured.image}
+                        alt={featured.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        unoptimized={featured.image.startsWith('/') && !featured.image.startsWith('//')}
+                      />
+                    ) : (
+                      <>
+                        {/* Eyes */}
+                        <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
+                          <div style={{ width: '22px', height: '22px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '4px', left: '4px', width: '8px', height: '8px', background: 'white', borderRadius: '50%' }} />
+                          </div>
+                          <div style={{ width: '22px', height: '22px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '4px', left: '4px', width: '8px', height: '8px', background: 'white', borderRadius: '50%' }} />
+                          </div>
+                        </div>
+                        {/* Smile */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: '38px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '60px',
+                            height: '22px',
+                            borderBottom: '5px solid #1A1A1A',
+                            borderRadius: '0 0 30px 30px',
+                          }}
+                        />
+                      </>
+                    )}
                   </div>
                   {/* Star badge */}
                   <div
@@ -305,17 +319,29 @@ export default async function CharactersPage() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
-                    {/* Eyes */}
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                      <div style={{ width: '16px', height: '16px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '3px', left: '3px', width: '6px', height: '6px', background: 'white', borderRadius: '50%' }} />
+                    {char.image && char.image !== '/placeholder-character.svg' ? (
+                      <Image
+                        src={char.image}
+                        alt={char.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        unoptimized={char.image.startsWith('/') && !char.image.startsWith('//')}
+                      />
+                    ) : (
+                      /* Eyes */
+                      <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                        <div style={{ width: '16px', height: '16px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                          <div style={{ position: 'absolute', top: '3px', left: '3px', width: '6px', height: '6px', background: 'white', borderRadius: '50%' }} />
+                        </div>
+                        <div style={{ width: '16px', height: '16px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
+                          <div style={{ position: 'absolute', top: '3px', left: '3px', width: '6px', height: '6px', background: 'white', borderRadius: '50%' }} />
+                        </div>
                       </div>
-                      <div style={{ width: '16px', height: '16px', background: '#1A1A1A', borderRadius: '50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '3px', left: '3px', width: '6px', height: '6px', background: 'white', borderRadius: '50%' }} />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div>
