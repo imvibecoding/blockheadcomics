@@ -62,7 +62,12 @@ async function readDataAsync<T>(filename: string): Promise<T> {
     try {
       const { head } = await import('@vercel/blob')
       const blob = await head(`data/${filename}`)
-      const res = await fetch(blob.url, { cache: 'no-store' })
+      // Append timestamp to bust CDN edge cache on every read
+      const bustUrl = `${blob.url}?t=${Date.now()}`
+      const res = await fetch(bustUrl, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
+      })
       if (!res.ok) throw new Error(`Blob fetch failed: ${res.status}`)
       return res.json() as Promise<T>
     } catch {
