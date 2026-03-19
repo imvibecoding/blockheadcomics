@@ -1,0 +1,33 @@
+[
+  {
+    "id": "1",
+    "slug": "the-alarm",
+    "title": "The Alarm",
+    "stripNumber": 1,
+    "publishedAt": "2024-01-15",
+    "series": "Daily Life",
+    "panels": [
+      {"id": "1", "image": "/placeholder-panel.svg", "caption": "Another sunny day!", "order": 1},
+      {"id": "2", "image": "/placeholder-panel.svg", "caption": "CRASH!!", "order": 2},
+      {"id": "3", "image": "/placeholder-panel.svg", "caption": "Wait... where's the coffee?", "order": 3},
+      {"id": "4", "image": "/placeholder-panel.svg", "caption": "SUCCESS!", "order": 4}
+    ],
+    "tags": ["morning", "chaos"],
+    "featured": true
+  },
+  {
+    "id": "2",
+    "slug": "the-great-monday-blues",
+    "title": "The Great Monday Blues",
+    "stripNumber": 2,
+    "publishedAt": "2024-01-22",
+    "series": "Daily Life",
+    "panels": [
+      {"id": "1", "image": "/placeholder-panel.svg", "caption": "Is the toaster judging me again?", "order": 1},
+      {"id": "2", "image": "/placeholder-panel.svg", "caption": "", "order": 2},
+      {"id": "3", "image": "/placeholder-panel.svg", "caption": "The sky is too blue for a Monday!", "order": 3}
+    ],
+    "tags": ["monday", "breakfast"],
+    "featured": false
+  }
+]

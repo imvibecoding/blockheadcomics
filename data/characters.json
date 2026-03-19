@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "slug": "blockhead",
+    "name": "Blockhead",
+    "tagline": "100% Sunny!",
+    "description": "The leader of the pack. Squarer than a box of crackers but twice as fun. Loves high-fives and morning sun!",
+    "color": "#F5C800",
+    "shape": "square",
+    "image": "/placeholder-character.svg",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "2",
+    "slug": "sky",
+    "name": "Sky",
+    "tagline": "Super Fast!",
+    "description": "Doesn't walk, just rolls. Fastest thing in the comic strip!",
+    "color": "#3BBFED",
+    "shape": "circle",
+    "image": "/placeholder-character.svg",
+    "featured": false,
+    "order": 2
+  },
+  {
+    "id": "3",
+    "slug": "dusty",
+    "name": "Dusty",
+    "tagline": "Always Grumpy!",
+    "description": "The strong and silent type. Been standing in that exact spot since 1998.",
+    "color": "#5c5b59",
+    "shape": "square",
+    "image": "/placeholder-character.svg",
+    "featured": false,
+    "order": 3
+  }
+]
