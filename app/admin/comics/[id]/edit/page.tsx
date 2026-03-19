@@ -272,6 +272,31 @@ export default function EditComicPage() {
                     )}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    {/* Image preview */}
+                    {panel.image && panel.image !== '/placeholder-panel.svg' && (
+                      <div style={{ gridColumn: 'span 2' }}>
+                        <div
+                          style={{
+                            width: '100%',
+                            maxHeight: '160px',
+                            border: '2px solid #1A1A1A',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            background: '#F2F0ED',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={panel.image}
+                            alt={`Panel ${i + 1} preview`}
+                            style={{ maxWidth: '100%', maxHeight: '160px', objectFit: 'contain', display: 'block' }}
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div>
                       <label style={labelStyle}>Image URL</label>
                       <input
@@ -293,6 +318,9 @@ export default function EditComicPage() {
                         disabled={uploading === panel.id}
                       />
                       {uploading === panel.id && <span style={{ fontSize: '0.78rem', color: '#5c5b59' }}>Uploading...</span>}
+                      {uploading !== panel.id && panel.image && panel.image !== '/placeholder-panel.svg' && (
+                        <span style={{ fontSize: '0.78rem', color: '#22c55e' }}>✓ Image set</span>
+                      )}
                     </div>
                     <div style={{ gridColumn: 'span 2' }}>
                       <label style={labelStyle}>Caption</label>

@@ -52,6 +52,9 @@ export type SiteSettings = {
   description: string
   socialLinks: { instagram: string; twitter: string; facebook: string }
   copyrightYear: string
+  aboutIntro: string
+  creatorNote: string
+  fanArtEmail: string
 }
 
 export function getComics(): Comic[] {

@@ -1,8 +1,12 @@
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
+import { getSettings } from '@/lib/data'
+
+export const dynamic = 'force-dynamic'
 
 export default function AboutPage() {
+  const settings = getSettings()
   return (
     <>
       <Navigation />
@@ -89,41 +93,19 @@ export default function AboutPage() {
               >
                 What is Blockhead Comics?
               </h2>
-              <p
-                style={{
-                  fontSize: '1.1rem',
-                  lineHeight: 1.8,
-                  color: '#2e2f2d',
-                  margin: '0 0 1.25rem',
-                }}
-              >
-                Blockhead Comics is a weekly comic strip following the cheerful misadventures of
-                Blockhead — a relentlessly optimistic yellow square — and his friends Sky (a blue
-                circle who never stops rolling) and Dusty (a grey block who prefers standing very still).
-              </p>
-              <p
-                style={{
-                  fontSize: '1.1rem',
-                  lineHeight: 1.8,
-                  color: '#2e2f2d',
-                  margin: '0 0 1.25rem',
-                }}
-              >
-                Every strip is a little window into their world: morning chaos, questionable coffee habits,
-                sky that&apos;s maybe a little too blue, and the occasional surprise visit from a toaster with
-                opinions.
-              </p>
-              <p
-                style={{
-                  fontSize: '1.1rem',
-                  lineHeight: 1.8,
-                  color: '#2e2f2d',
-                  margin: 0,
-                }}
-              >
-                The strip is drawn with a hand-crafted, comic-book aesthetic — bold lines, bright colors,
-                and a healthy dose of sunshine.
-              </p>
+              {settings.aboutIntro.split('\n\n').map((para, i, arr) => (
+                <p
+                  key={i}
+                  style={{
+                    fontSize: '1.1rem',
+                    lineHeight: 1.8,
+                    color: '#2e2f2d',
+                    margin: i < arr.length - 1 ? '0 0 1.25rem' : '0',
+                  }}
+                >
+                  {para}
+                </p>
+              ))}
             </div>
 
             <div
@@ -197,9 +179,7 @@ export default function AboutPage() {
                     margin: 0,
                   }}
                 >
-                  Because everyone needs a little more sunshine in their day. Blockhead Comics
-                  started as a series of doodles and grew into a full weekly strip, fueled entirely
-                  by coffee and the belief that squares can indeed have a great time.
+                  {settings.creatorNote}
                 </p>
               </div>
             </div>
@@ -242,7 +222,7 @@ export default function AboutPage() {
                 all welcome.
               </p>
               <a
-                href="mailto:fan@blockheadcomics.com"
+                href={`mailto:${settings.fanArtEmail || 'fan@blockheadcomics.com'}`}
                 className="wiggle-hover"
                 style={{
                   display: 'inline-flex',

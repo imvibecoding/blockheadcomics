@@ -44,10 +44,17 @@ function StatCard({ label, value, color, icon }: { label: string; value: string 
 export default function AdminDashboard() {
   const [comics, setComics] = useState<Comic[]>([])
   const [characters, setCharacters] = useState<Character[]>([])
+  const [isVercel, setIsVercel] = useState(false)
 
   useEffect(() => {
     fetch('/api/comics').then(r => r.json()).then(setComics)
     fetch('/api/characters').then(r => r.json()).then(setCharacters)
+    // Detect Vercel by checking hostname
+    setIsVercel(
+      window.location.hostname.endsWith('.vercel.app') ||
+      window.location.hostname === 'www.blockheadcomics.com' ||
+      window.location.hostname === 'blockheadcomics.com'
+    )
   }, [])
 
   const recentComics = [...comics]
@@ -57,6 +64,35 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <div style={{ maxWidth: '900px' }}>
+        {/* Vercel notice */}
+        {isVercel && (
+          <div
+            style={{
+              background: '#fffbeb',
+              border: '2px solid #F5C800',
+              borderRadius: '10px',
+              padding: '1rem 1.25rem',
+              marginBottom: '1.75rem',
+              display: 'flex',
+              gap: '0.75rem',
+              alignItems: 'flex-start',
+            }}
+          >
+            <span style={{ fontSize: '1.25rem', flexShrink: 0, lineHeight: 1.4 }}>⚠️</span>
+            <div>
+              <div style={{ fontFamily: 'var(--font-headline)', fontWeight: 800, fontSize: '0.95rem', color: '#1A1A1A', marginBottom: '0.2rem' }}>
+                Running on Vercel — changes won&apos;t persist
+              </div>
+              <div style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', color: '#5c5b59', lineHeight: 1.5 }}>
+                The file-based storage can&apos;t write on Vercel. To update content: edit the JSON files locally, add images to{' '}
+                <code style={{ background: '#F2F0ED', padding: '0.1rem 0.3rem', borderRadius: '3px', fontSize: '0.8rem' }}>public/uploads/</code>, then{' '}
+                <code style={{ background: '#F2F0ED', padding: '0.1rem 0.3rem', borderRadius: '3px', fontSize: '0.8rem' }}>git push</code> to deploy.{' '}
+                Ask about Supabase integration when you&apos;re ready for live editing.
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Page title */}
         <div style={{ marginBottom: '2rem' }}>
           <h1

@@ -195,6 +195,29 @@ export default function EditCharacterPage() {
               </div>
               <div>
                 <label style={labelStyle}>Image</label>
+                {form.image && (
+                  <div
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      border: '2px solid #1A1A1A',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      background: form.color || '#F2F0ED',
+                      marginBottom: '0.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={form.image}
+                      alt="Character preview"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                )}
                 <input
                   type="file"
                   accept="image/*"
@@ -206,6 +229,9 @@ export default function EditCharacterPage() {
                   style={{ fontSize: '0.85rem' }}
                 />
                 {uploading && <span style={{ fontSize: '0.78rem', color: '#5c5b59' }}>Uploading...</span>}
+                {!uploading && form.image && form.image !== '/placeholder-character.svg' && (
+                  <span style={{ fontSize: '0.78rem', color: '#22c55e', display: 'block', marginTop: '0.25rem' }}>✓ Image set</span>
+                )}
               </div>
               <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <input

@@ -9,6 +9,9 @@ type SiteSettings = {
   description: string
   socialLinks: { instagram: string; twitter: string; facebook: string }
   copyrightYear: string
+  aboutIntro: string
+  creatorNote: string
+  fanArtEmail: string
 }
 
 const inputStyle: React.CSSProperties = {
@@ -44,6 +47,9 @@ export default function AdminSettingsPage() {
     description: '',
     socialLinks: { instagram: '', twitter: '', facebook: '' },
     copyrightYear: '',
+    aboutIntro: '',
+    creatorNote: '',
+    fanArtEmail: '',
   })
 
   useEffect(() => {
@@ -196,6 +202,58 @@ export default function AdminSettingsPage() {
                   />
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* About Page */}
+          <div
+            style={{
+              background: '#ffffff',
+              border: '3px solid #1A1A1A',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              boxShadow: '4px 4px 0 0 #1A1A1A',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <h2 style={{ fontFamily: 'var(--font-headline)', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 1.25rem', color: '#1A1A1A' }}>
+              About Page
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={labelStyle}>About Intro</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  Separate paragraphs with a blank line. This is the main &ldquo;What is Blockhead Comics?&rdquo; text.
+                </p>
+                <textarea
+                  style={{ ...inputStyle, minHeight: '140px', resize: 'vertical' }}
+                  value={settings.aboutIntro}
+                  onChange={e => setSettings(p => ({ ...p, aboutIntro: e.target.value }))}
+                  placeholder="Blockhead Comics is a weekly comic strip..."
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Creator Note</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  The &ldquo;Why Blockhead?&rdquo; card on the about page.
+                </p>
+                <textarea
+                  style={{ ...inputStyle, minHeight: '90px', resize: 'vertical' }}
+                  value={settings.creatorNote}
+                  onChange={e => setSettings(p => ({ ...p, creatorNote: e.target.value }))}
+                  placeholder="Because everyone needs a little more sunshine..."
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Fan Art Email</label>
+                <input
+                  style={inputStyle}
+                  type="email"
+                  value={settings.fanArtEmail}
+                  onChange={e => setSettings(p => ({ ...p, fanArtEmail: e.target.value }))}
+                  placeholder="fan@blockheadcomics.com"
+                />
+              </div>
             </div>
           </div>
 
