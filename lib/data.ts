@@ -61,6 +61,8 @@ export type SiteSettings = {
   fanArtEmail: string
   shopifyStoreUrl: string
   shopifyStorefrontToken: string
+  instagramUserId: string
+  instagramAccessToken: string
 }
 
 // ─── Storage helpers ──────────────────────────────────────────────────────────

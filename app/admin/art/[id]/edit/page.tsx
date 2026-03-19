@@ -3,7 +3,6 @@
 import AdminLayout from '@/components/AdminLayout'
 import Link from 'next/link'
 import { useState, useEffect, use } from 'react'
-import { useRouter } from 'next/navigation'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
@@ -31,7 +30,6 @@ const ART_CATEGORIES = ['character', 'comic', 'landscape', 'fan art', 'general']
 
 export default function EditArtPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
