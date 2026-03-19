@@ -60,16 +60,13 @@ export type SiteSettings = {
 async function readDataAsync<T>(filename: string): Promise<T> {
   if (USE_BLOB) {
     try {
-      const { head } = await import('@vercel/blob')
-      const blob = await head(`data/${filename}`)
-      // Append timestamp to bust CDN edge cache on every read
-      const bustUrl = `${blob.url}?t=${Date.now()}`
-      const res = await fetch(bustUrl, {
-        cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
-      })
-      if (!res.ok) throw new Error(`Blob fetch failed: ${res.status}`)
-      return res.json() as Promise<T>
+      // Use get() rather than head()+fetch() — goes through the authenticated
+      // Blob API, bypassing CDN caching entirely so reads are always fresh.
+      const { get } = await import('@vercel/blob')
+      const result = await get(`data/${filename}`, { access: 'public' })
+      if (result?.stream) {
+        return new Response(result.stream).json() as Promise<T>
+      }
     } catch {
       // Blob doesn't exist yet — seed from the bundled JSON file
     }
