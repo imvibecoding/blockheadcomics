@@ -2,16 +2,15 @@ import fs from 'fs'
 import path from 'path'
 
 const dataDir = path.join(process.cwd(), 'data')
+const USE_BLOB = !!process.env.BLOB_READ_WRITE_TOKEN
 
-export function readData<T>(filename: string): T {
-  const filePath = path.join(dataDir, filename)
-  const content = fs.readFileSync(filePath, 'utf-8')
-  return JSON.parse(content)
-}
+// ─── Types ───────────────────────────────────────────────────────────────────
 
-export function writeData<T>(filename: string, data: T): void {
-  const filePath = path.join(dataDir, filename)
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
+export type Panel = {
+  id: string
+  image: string
+  caption: string
+  order: number
 }
 
 export type Comic = {
@@ -24,13 +23,6 @@ export type Comic = {
   panels: Panel[]
   tags: string[]
   featured: boolean
-}
-
-export type Panel = {
-  id: string
-  image: string
-  caption: string
-  order: number
 }
 
 export type Character = {
@@ -57,30 +49,82 @@ export type SiteSettings = {
   fanArtEmail: string
 }
 
-export function getComics(): Comic[] {
-  return readData<Comic[]>('comics.json')
+// ─── Storage helpers ──────────────────────────────────────────────────────────
+
+/**
+ * Read JSON data.
+ * On Vercel (BLOB_READ_WRITE_TOKEN present): reads from Vercel Blob, falls back
+ * to the bundled JSON file if the blob doesn't exist yet (first deploy).
+ * Locally: reads from data/ directory.
+ */
+async function readDataAsync<T>(filename: string): Promise<T> {
+  if (USE_BLOB) {
+    try {
+      const { head } = await import('@vercel/blob')
+      const blob = await head(`data/${filename}`)
+      const res = await fetch(blob.url, { cache: 'no-store' })
+      if (!res.ok) throw new Error(`Blob fetch failed: ${res.status}`)
+      return res.json() as Promise<T>
+    } catch {
+      // Blob doesn't exist yet — seed from the bundled JSON file
+    }
+  }
+  const content = fs.readFileSync(path.join(dataDir, filename), 'utf-8')
+  return JSON.parse(content) as T
 }
 
-export function getComic(slug: string): Comic | undefined {
-  return getComics().find(c => c.slug === slug)
+/**
+ * Write JSON data.
+ * On Vercel: writes to Vercel Blob (overwrites the same pathname each time).
+ * Locally: writes to data/ directory.
+ */
+async function writeDataAsync<T>(filename: string, data: T): Promise<void> {
+  if (USE_BLOB) {
+    const { put } = await import('@vercel/blob')
+    await put(`data/${filename}`, JSON.stringify(data, null, 2), {
+      access: 'public',
+      allowOverwrite: true,
+      contentType: 'application/json',
+    })
+    return
+  }
+  fs.writeFileSync(
+    path.join(dataDir, filename),
+    JSON.stringify(data, null, 2)
+  )
 }
 
-export function saveComics(comics: Comic[]): void {
-  writeData('comics.json', comics)
+// ─── Comics ───────────────────────────────────────────────────────────────────
+
+export async function getComics(): Promise<Comic[]> {
+  return readDataAsync<Comic[]>('comics.json')
 }
 
-export function getCharacters(): Character[] {
-  return readData<Character[]>('characters.json')
+export async function getComic(slug: string): Promise<Comic | undefined> {
+  const comics = await getComics()
+  return comics.find(c => c.slug === slug)
 }
 
-export function saveCharacters(characters: Character[]): void {
-  writeData('characters.json', characters)
+export async function saveComics(comics: Comic[]): Promise<void> {
+  return writeDataAsync('comics.json', comics)
 }
 
-export function getSettings(): SiteSettings {
-  return readData<SiteSettings>('settings.json')
+// ─── Characters ───────────────────────────────────────────────────────────────
+
+export async function getCharacters(): Promise<Character[]> {
+  return readDataAsync<Character[]>('characters.json')
 }
 
-export function saveSettings(settings: SiteSettings): void {
-  writeData('settings.json', settings)
+export async function saveCharacters(characters: Character[]): Promise<void> {
+  return writeDataAsync('characters.json', characters)
+}
+
+// ─── Settings ─────────────────────────────────────────────────────────────────
+
+export async function getSettings(): Promise<SiteSettings> {
+  return readDataAsync<SiteSettings>('settings.json')
+}
+
+export async function saveSettings(settings: SiteSettings): Promise<void> {
+  return writeDataAsync('settings.json', settings)
 }

@@ -4,9 +4,11 @@ import ComicPanel from '@/components/ComicPanel'
 import { getComics, getCharacters } from '@/lib/data'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
-  const comics = getComics()
-  const characters = getCharacters()
+  const comics = await getComics()
+  const characters = await getCharacters()
   const latestComic = comics[comics.length - 1] ?? comics[0]
   const featuredComic = comics.find(c => c.featured) ?? comics[0]
 

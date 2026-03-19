@@ -4,9 +4,10 @@ import { getAdminSession } from '@/lib/auth'
 
 export async function GET() {
   try {
-    const comics = getComics()
+    const comics = await getComics()
     return NextResponse.json(comics)
-  } catch {
+  } catch (err) {
+    console.error('GET /api/comics:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -16,13 +17,14 @@ export async function POST(request: NextRequest) {
     if (!await getAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    const comics = getComics()
+    const comics = await getComics()
     const body = await request.json()
     const newComic = { ...body, id: Date.now().toString() }
     comics.push(newComic)
-    saveComics(comics)
+    await saveComics(comics)
     return NextResponse.json(newComic)
-  } catch {
+  } catch (err) {
+    console.error('POST /api/comics:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -6,10 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-export async function generateStaticParams() {
-  const comics = getComics()
-  return comics.map(c => ({ slug: c.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export default async function ComicReaderPage({
   params,
@@ -17,10 +14,10 @@ export default async function ComicReaderPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const comic = getComic(slug)
+  const comic = await getComic(slug)
   if (!comic) notFound()
 
-  const allComics = getComics().sort((a, b) => a.stripNumber - b.stripNumber)
+  const allComics = (await getComics()).sort((a, b) => a.stripNumber - b.stripNumber)
   const currentIndex = allComics.findIndex(c => c.slug === slug)
   const prevComic = currentIndex > 0 ? allComics[currentIndex - 1] : null
   const nextComic = currentIndex < allComics.length - 1 ? allComics[currentIndex + 1] : null

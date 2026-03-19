@@ -5,8 +5,8 @@ import { getSettings } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
-export default function AboutPage() {
-  const settings = getSettings()
+export default async function AboutPage() {
+  const settings = await getSettings()
   return (
     <>
       <Navigation />

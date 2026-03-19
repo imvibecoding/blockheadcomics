@@ -3,8 +3,10 @@ import Footer from '@/components/Footer'
 import { getCharacters } from '@/lib/data'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function CharactersPage() {
-  const characters = getCharacters()
+  const characters = await getCharacters()
   const featured = characters.find(c => c.featured)
   const others = characters.filter(c => !c.featured)
 

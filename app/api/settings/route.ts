@@ -4,8 +4,10 @@ import { getAdminSession } from '@/lib/auth'
 
 export async function GET() {
   try {
-    return NextResponse.json(getSettings())
-  } catch {
+    const settings = await getSettings()
+    return NextResponse.json(settings)
+  } catch (err) {
+    console.error('GET /api/settings:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -16,9 +18,10 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     const body = await request.json()
-    saveSettings(body)
+    await saveSettings(body)
     return NextResponse.json(body)
-  } catch {
+  } catch (err) {
+    console.error('PUT /api/settings:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
