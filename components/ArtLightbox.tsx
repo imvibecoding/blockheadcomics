@@ -68,8 +68,9 @@ export default function ArtLightbox({ art }: ArtLightboxProps) {
     return () => { document.body.style.overflow = '' }
   }, [selected])
 
+  // Only the first featured piece gets the hero slot — all others go in the grid
   const featured = sorted.find(a => a.featured)
-  const rest = sorted.filter(a => !a.featured)
+  const rest = sorted.filter(a => a.id !== featured?.id)
 
   return (
     <>
