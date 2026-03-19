@@ -12,6 +12,8 @@ type SiteSettings = {
   aboutIntro: string
   creatorNote: string
   fanArtEmail: string
+  shopifyStoreUrl: string
+  shopifyStorefrontToken: string
 }
 
 const inputStyle: React.CSSProperties = {
@@ -50,6 +52,8 @@ export default function AdminSettingsPage() {
     aboutIntro: '',
     creatorNote: '',
     fanArtEmail: '',
+    shopifyStoreUrl: '',
+    shopifyStorefrontToken: '',
   })
 
   useEffect(() => {
@@ -252,6 +256,52 @@ export default function AdminSettingsPage() {
                   value={settings.fanArtEmail}
                   onChange={e => setSettings(p => ({ ...p, fanArtEmail: e.target.value }))}
                   placeholder="fan@blockheadcomics.com"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Shopify / Store */}
+          <div
+            style={{
+              background: '#ffffff',
+              border: '3px solid #1A1A1A',
+              borderRadius: '12px',
+              padding: '1.75rem',
+              boxShadow: '4px 4px 0 0 #1A1A1A',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <h2 style={{ fontFamily: 'var(--font-headline)', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 0.5rem', color: '#1A1A1A' }}>
+              Store / Shopify
+            </h2>
+            <p style={{ fontSize: '0.85rem', color: '#5c5b59', margin: '0 0 1.25rem', lineHeight: 1.5 }}>
+              Connect your Shopify store to enable the live store page. Leave blank to show a &ldquo;Coming Soon&rdquo; page. Printify integrates through Shopify automatically once connected.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={labelStyle}>Shopify Store URL</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  e.g. <code>your-store.myshopify.com</code> (no https://)
+                </p>
+                <input
+                  style={inputStyle}
+                  value={settings.shopifyStoreUrl}
+                  onChange={e => setSettings(p => ({ ...p, shopifyStoreUrl: e.target.value }))}
+                  placeholder="your-store.myshopify.com"
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Shopify Storefront API Token</label>
+                <p style={{ fontSize: '0.8rem', color: '#5c5b59', margin: '0 0 0.5rem' }}>
+                  Found in Shopify Admin → Apps → Storefront API. Used to load products on the public store page.
+                </p>
+                <input
+                  style={inputStyle}
+                  type="password"
+                  value={settings.shopifyStorefrontToken}
+                  onChange={e => setSettings(p => ({ ...p, shopifyStorefrontToken: e.target.value }))}
+                  placeholder="shpat_••••••••••••••••"
                 />
               </div>
             </div>

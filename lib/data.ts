@@ -38,6 +38,17 @@ export type Character = {
   order: number
 }
 
+export type ArtPiece = {
+  id: string
+  title: string
+  description: string
+  image: string
+  category: string
+  publishedAt: string
+  featured: boolean
+  order: number
+}
+
 export type SiteSettings = {
   siteTitle: string
   tagline: string
@@ -47,6 +58,8 @@ export type SiteSettings = {
   aboutIntro: string
   creatorNote: string
   fanArtEmail: string
+  shopifyStoreUrl: string
+  shopifyStorefrontToken: string
 }
 
 // ─── Storage helpers ──────────────────────────────────────────────────────────
@@ -119,6 +132,16 @@ export async function getCharacters(): Promise<Character[]> {
 
 export async function saveCharacters(characters: Character[]): Promise<void> {
   return writeDataAsync('characters.json', characters)
+}
+
+// ─── Art ──────────────────────────────────────────────────────────────────────
+
+export async function getArt(): Promise<ArtPiece[]> {
+  return readDataAsync<ArtPiece[]>('art.json')
+}
+
+export async function saveArt(art: ArtPiece[]): Promise<void> {
+  return writeDataAsync('art.json', art)
 }
 
 // ─── Settings ─────────────────────────────────────────────────────────────────

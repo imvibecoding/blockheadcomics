@@ -7,6 +7,7 @@ const sidebarLinks = [
   { href: '/admin', label: 'Dashboard', icon: '📊', exact: true },
   { href: '/admin/comics', label: 'Comics', icon: '📚', exact: false },
   { href: '/admin/characters', label: 'Characters', icon: '🎭', exact: false },
+  { href: '/admin/art', label: 'Art Gallery', icon: '🎨', exact: false },
   { href: '/admin/settings', label: 'Settings', icon: '⚙️', exact: false },
 ]
 
