@@ -1,6 +1,9 @@
 import Link from 'next/link'
+import FooterSocialLinks from './FooterSocialLinks'
 
 export default function Footer() {
+  const year = new Date().getFullYear()
+
   return (
     <footer
       style={{
@@ -20,7 +23,6 @@ export default function Footer() {
           zIndex: 10,
         }}
       >
-        {/* Blockhead peeking - just eyes and top of head visible */}
         <div style={{ position: 'relative', width: '64px', height: '64px' }}>
           <div
             style={{
@@ -125,6 +127,7 @@ export default function Footer() {
               {[
                 { href: '/comics', label: 'Comics Archive' },
                 { href: '/characters', label: 'Characters' },
+                { href: '/art', label: 'Art Gallery' },
                 { href: '/about', label: 'About' },
               ].map((link) => (
                 <li key={link.href}>
@@ -161,50 +164,7 @@ export default function Footer() {
             >
               Follow Along
             </h3>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              {/* Instagram */}
-              <a
-                href="#"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  background: '#F5C800',
-                  border: '3px solid #F5C800',
-                  borderRadius: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#1A1A1A',
-                  textDecoration: 'none',
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                }}
-                aria-label="Instagram"
-              >
-                IG
-              </a>
-              {/* Twitter/X */}
-              <a
-                href="#"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  background: '#3BBFED',
-                  border: '3px solid #3BBFED',
-                  borderRadius: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#1A1A1A',
-                  textDecoration: 'none',
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                }}
-                aria-label="Twitter"
-              >
-                X
-              </a>
-            </div>
+            <FooterSocialLinks />
           </div>
         </div>
 
@@ -222,7 +182,7 @@ export default function Footer() {
           }}
         >
           <p style={{ color: '#5c5b59', fontSize: '0.85rem', margin: 0 }}>
-            &copy; 2024 Blockhead Comics. All rights reserved.
+            &copy; {year} Blockhead Comics. All rights reserved.
           </p>
           <Link
             href="/admin"
